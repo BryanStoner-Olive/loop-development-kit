@@ -170,6 +170,115 @@ export default class IntroWhisper {
         console.log('Radio button option selected: ', val);
       },
     };
+const onActionWrapper = (
+  error,
+  actionType,
+  resolverMap,
+  createdWhisper,
+) => {
+  if (error) {
+    console.error(error);
+  }
+  console.debug(`Received ${actionType} event`);
+  resolverMap.set(actionType, true);
+
+  if (areAllResolved(resolverMap)) {
+    createdWhisper.close(() => {
+      // do nothing.
+    });
+  }
+};
+
+    const autocompleteOptions = [
+      { label: 'Value 1', value: '1' },
+      { label: 'Value 2', value: '2' },
+      { label: 'Value 3', value: '3' },
+      { label: 'Value 4', value: '4' },
+      { label: 'Value 5', value: '5' },
+    ];
+    const autocompleteSingleSelect{{it.isTypeScript ? ': whisper.Autocomplete' : ''}} = {
+      type: WhisperComponentType.Autocomplete,
+      label: 'Autocomplete Test',
+      loading: false,
+      onChange: (_error, val) => {
+        console.log('Autocomplete secection changed: ', val);
+      },
+      onSelect: (error, value, onSelectWhisper) => {
+        console.log(`Received selected value: ${JSON.stringify(value)}`);
+        if (value.includes('4')) {
+          onActionWrapper(error, 'Select', resolverMap, onSelectWhisper);
+        }
+      },
+      options: autocompleteOptions,
+    };
+    const autocompleteMultipleSelect{{it.isTypeScript ? ': whisper.Autocomplete' : ''}} = {
+      type: WhisperComponentType.Autocomplete,
+      label: 'Autocomplete Test',
+      loading: true,
+      multiple: true,
+      onSelect: (error, value, onSelectWhisper) => {
+        console.log(`Received selected value: ${JSON.stringify(value)}`);
+        if (value.includes('4') && value.includes('5')) {
+          onActionWrapper(error, 'Multiple', resolverMap, onSelectWhisper);
+        }
+      },
+      options: autocompleteOptions,
+      tooltip: 'tooltip',
+      value: '5',
+    };
+    const dateTimeInput{{it.isTypeScript ? ': whisper.DateTimeInput' : ''}}= {
+      type: whisper.WhisperComponentType.DateTimeInput,
+      dateTimeType: DateTimeType.Date,
+      tooltip: 'Date',
+      onChange: (_error{{it.isTypeScript ? ': Error | undefined' : ''}}, val{{it.isTypeScript ? ': string' : ''}}) => {
+        console.debug(`Time picker value received: ${value}`);
+      },
+    };
+    // dropzone example components.
+    const dropZone{{it.isTypeScript ? ': whisper.DropZone' : ''}} = {
+      type: WhisperComponentType.DropZone,
+      onDrop: (_error{{it.isTypeScript ? ': Error | undefined' : ''}}, val{{it.isTypeScript ? ': string' : ''}}) => {
+        console.log('File has been droped', param);
+      },
+      label: 'File Components',
+    };
+    const icon{{it.isTypeScript ? ': whisper.Icon' : ''}} = {
+      type: WhisperComponentType.Icon,
+      name: 'emoji_emotions',
+      size: IconSize.Medium,
+      color: Color.Grey,
+      onClick: () => {
+        console.log('Emoji Emotions Clicked');
+      },
+    };
+    const sectionTitle{{it.isTypeScript ? ': whisper.SectionTitle' : ''}} = {
+      body: 'section Title in center',
+      type: WhisperComponentType.SectionTitle,
+      textAlign: TextAlign.Center,
+    };
+    const breadcrumbs{{it.isTypeScript ? ': whisper.Breadcrumbs' : ''}} ={
+      type: whisper.WhisperComponentType.Breadcrumbs,
+      links: [
+        {
+          type: WhisperComponentType.Link,
+          text: 'Breadcrumb 1',
+        },
+        {
+          type: WhisperComponentType.Link,
+          text: 'Breadcrumb 2',
+        },
+        {
+          type: WhisperComponentType.Link,
+          text: 'Breadcrumb 3',
+        },
+      ],
+    };
+    const progress{{it.isTypeScript ? ': whisper.Progress' : ''}} = {        
+      type: WhisperComponentType.Progress,
+      determinate: 30,
+      shape: ProgressShape.Circular,
+      size: StyleSize.Small,
+    };
 
     // Showing how to use whisper.update
     const updatableComponentsHeading{{it.isTypeScript ? ': whisper.Markdown' : ''}} = {
@@ -224,8 +333,13 @@ export default class IntroWhisper {
     }
 
     return [
+      autocompleteSingleSelect,
+      autocompleteMultipleSelect,
+      breadcrumbs,
       introMessage,
+      dateTimeInput,
       divider,
+      dropZone,
       collapseBox,
       divider,
       boxHeader,
@@ -241,9 +355,12 @@ export default class IntroWhisper {
       checkbox,
       pair,
       numberInput,
+      sectionTitle,
       select,
       radioBtn,
       divider,
+      icon,
+      progress,
       updatableComponentsHeading,
       updatableMessage,
       updatableMessageInput,
